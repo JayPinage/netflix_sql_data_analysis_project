@@ -123,6 +123,18 @@ select country ,
  order by  duration_minutes desc limit 1; 
  
  -- 14. What is the most recently released movie for each country?
+
+ with latest as(
+
+    select Country,title,release_year,
+    ROW_NUMBER() over (partition by Country order by release_year desc ) as rnk 
+    from netflix
+    where type = 'Movie'
+ )
+
+ select Country,title as latest_movies , release_year
+from latest 
+where rnk =1 ; 
  
 -- 15. Identify the release years in which more than 50 movies from India were released.
  
